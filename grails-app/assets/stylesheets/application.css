@@ -11,8 +11,6 @@
 *= require bootstrap
 *= require main
 *= require mobile
-*= require font-awesome.min
-*= require morris
-*= require sb-admin
+*= require_tree .
 *= require_self
 */
