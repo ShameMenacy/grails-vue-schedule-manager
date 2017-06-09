@@ -11,12 +11,13 @@ class Sm_User {
     Date dateCreated
     Date lastUpdated
 
-    Sm_Project project
+    static hasOne = [project: Sm_Project]
 
     static constraints = {
         loginId size: 5..15, blank: false, unique: true
         name nullable: false, maxSize: 128
         mailAddress email: true, blank: false
+        project nullable: true
     }
 
     static mapping = {

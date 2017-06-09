@@ -1,5 +1,7 @@
 package sm.bipvn
 
+import grails.converters.JSON
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
@@ -10,7 +12,7 @@ class Sm_ResourceController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Sm_Resource.list(params), model:[sm_ResourceCount: Sm_Resource.count()]
+        respond users: Sm_Resource.list(params) as JSON
     }
 
     def show(Sm_Resource sm_Resource) {
@@ -31,11 +33,11 @@ class Sm_ResourceController {
 
         if (sm_Resource.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond sm_Resource.errors, view:'create'
+            respond sm_Resource.errors, view: 'create'
             return
         }
 
-        sm_Resource.save flush:true
+        sm_Resource.save flush: true
 
         request.withFormat {
             form multipartForm {
@@ -60,18 +62,18 @@ class Sm_ResourceController {
 
         if (sm_Resource.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond sm_Resource.errors, view:'edit'
+            respond sm_Resource.errors, view: 'edit'
             return
         }
 
-        sm_Resource.save flush:true
+        sm_Resource.save flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.updated.message', args: [message(code: 'sm_Resource.label', default: 'Sm_Resource'), sm_Resource.id])
                 redirect sm_Resource
             }
-            '*'{ respond sm_Resource, [status: OK] }
+            '*' { respond sm_Resource, [status: OK] }
         }
     }
 
@@ -84,14 +86,14 @@ class Sm_ResourceController {
             return
         }
 
-        sm_Resource.delete flush:true
+        sm_Resource.delete flush: true
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'sm_Resource.label', default: 'Sm_Resource'), sm_Resource.id])
-                redirect action:"index", method:"GET"
+                redirect action: "index", method: "GET"
             }
-            '*'{ render status: NO_CONTENT }
+            '*' { render status: NO_CONTENT }
         }
     }
 
@@ -101,7 +103,7 @@ class Sm_ResourceController {
                 flash.message = message(code: 'default.not.found.message', args: [message(code: 'sm_Resource.label', default: 'Sm_Resource'), params.id])
                 redirect action: "index", method: "GET"
             }
-            '*'{ render status: NOT_FOUND }
+            '*' { render status: NOT_FOUND }
         }
     }
 }

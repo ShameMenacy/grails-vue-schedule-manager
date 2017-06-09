@@ -6,7 +6,7 @@ class BootStrap {
 
     def init = { servletContext ->
         if (Sm_Resource.count() == 0) {
-            new Sm_Resource(name: 'OAA', reserved: 1).save()
+            new Sm_Resource(id: 1, name: 'OAA', reserved: 1).save()
         }
     }
     def destroy = {

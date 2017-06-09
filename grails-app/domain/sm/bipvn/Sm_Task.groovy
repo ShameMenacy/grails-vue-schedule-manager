@@ -10,7 +10,7 @@ class Sm_Task {
     Integer task_order
     Integer percent
 
-    static hasOne = [project: Sm_Project]
+    Sm_Project project
 
     static hasMany = [resources: Sm_Resource]
 

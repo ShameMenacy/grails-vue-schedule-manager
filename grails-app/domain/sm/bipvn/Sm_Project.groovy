@@ -5,13 +5,14 @@ class Sm_Project {
     Date dateCreated
     Date lastUpdated
 
-    Sm_Task task
+    static hasOne = [task: Sm_Task]
 
-    static hasOne = [owner: Sm_User]
+    Sm_User owner
 
     static constraints = {
         owner unique: true
         name nullable: false, blank: false
+        task nullable: true
     }
 
     static mapping = {
