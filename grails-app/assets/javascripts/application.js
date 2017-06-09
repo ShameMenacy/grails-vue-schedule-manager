@@ -7,6 +7,9 @@
 //
 //= require jquery-2.2.0.min
 //= require bootstrap
+//= require vue.min
+//= require date_fns.min
+//= require components.bundle
 //= require_tree .
 //= require_self
 

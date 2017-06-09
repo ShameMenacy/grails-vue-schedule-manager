@@ -1,5 +1,8 @@
 package sm.bipvn
 
+import grails.rest.Resource
+
+@Resource(uri='/sm/users', formats=['json', 'xml'], readOnly=true)
 class Sm_User {
 
     String loginId

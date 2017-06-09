@@ -8,7 +8,9 @@
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
+
     <asset:stylesheet src="application.css"/>
+    <asset:javascript src="application.js"/>
 
     <g:layoutHead/>
 </head>
@@ -24,7 +26,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Schedule Management System</a>
+            <a class="navbar-brand" href="/">Schedule Management System</a>
         </div>
         <!-- /.navbar-header -->
 
@@ -236,51 +238,51 @@
                         <a href="#"><i class="fa fa-user-circle fa-fw"></i> Account<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="#">User</a>
+                                <a href="/sm/user">User</a>
                             </li>
                             <li>
-                                <a href="#">Resource</a>
+                                <a href="/sm/resource">Resource</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-bandcamp fa-fw"></i> Project</a>
+                        <a href="/sm/project"><i class="fa fa-bandcamp fa-fw"></i> Project</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-eercast fa-fw"></i> Task</a>
+                        <a href="/sm/task"><i class="fa fa-eercast fa-fw"></i> Task</a>
                     </li>
-                    <li>
-                        <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span
-                                class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="#">Second Level Item</a>
-                            </li>
-                            <li>
-                                <a href="#">Second Level Item</a>
-                            </li>
-                            <li>
-                                <a href="#">Third Level <span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href="#">Third Level Item</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Third Level Item</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Third Level Item</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Third Level Item</a>
-                                    </li>
-                                </ul>
-                                <!-- /.nav-third-level -->
-                            </li>
-                        </ul>
-                        <!-- /.nav-second-level -->
-                    </li>
+                    <!--<li>-->
+                        <!--<a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span-->
+                                <!--class="fa arrow"></span></a>-->
+                        <!--<ul class="nav nav-second-level">-->
+                            <!--<li>-->
+                                <!--<a href="#">Second Level Item</a>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<a href="#">Second Level Item</a>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<a href="#">Third Level <span class="fa arrow"></span></a>-->
+                                <!--<ul class="nav nav-third-level">-->
+                                    <!--<li>-->
+                                        <!--<a href="#">Third Level Item</a>-->
+                                    <!--</li>-->
+                                    <!--<li>-->
+                                        <!--<a href="#">Third Level Item</a>-->
+                                    <!--</li>-->
+                                    <!--<li>-->
+                                        <!--<a href="#">Third Level Item</a>-->
+                                    <!--</li>-->
+                                    <!--<li>-->
+                                        <!--<a href="#">Third Level Item</a>-->
+                                    <!--</li>-->
+                                <!--</ul>-->
+                                <!--&lt;!&ndash; /.nav-third-level &ndash;&gt;-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                        <!--&lt;!&ndash; /.nav-second-level &ndash;&gt;-->
+                    <!--</li>-->
                 </ul>
             </div>
             <!-- /.sidebar-collapse -->
@@ -294,8 +296,6 @@
     <!-- /#page-wrapper -->
 </div>
 <!-- /#wrapper -->
-
-<asset:javascript src="application.js"/>
 
 </body>
 </html>
