@@ -104,17 +104,17 @@ dataSource:
 
 environments:
     development:
-        dataSource:
-            dbCreate: update
-            url: jdbc:postgresql://localhost:5432/sm.bipvn.demo
+        dataSource:                 #http://javadeveloper.asia/understanding-grails-dbcreate-or-hbm2ddl
+            dbCreate: update        #create  create-drop update validate
+            url: jdbc:postgresql://localhost:5432/sms_demo
     test:
         dataSource:
             dbCreate: update
-            url: jdbc:postgresql://localhost:5432/sm.bipvn.demo
+            url: jdbc:postgresql://localhost:5432/sms_demo
     production:
         dataSource:
             dbCreate: none
-            url: jdbc:postgresql://localhost:5432/sm.bipvn.demo
+            url: jdbc:postgresql://localhost:5432/sms_demo
             properties:
                 jmxEnabled: true
                 initialSize: 5

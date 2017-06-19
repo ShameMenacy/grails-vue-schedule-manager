@@ -1,5 +1,7 @@
 package sm.bipvn
 
+import grails.rest.Resource
+
 class Sm_Task {
 
     String name
@@ -16,18 +18,22 @@ class Sm_Task {
 
     static constraints = {
         name nullable: false, blank: false, maxSize: 128
+        plan_startDate nullable: true, blank: true
+        plan_endDate nullable: true, blank: true, validator: { val, self ->
+            if (val && val < self.plan_startDate) return 'default.invalid.max.message'
+        }
+        actual_startDate nullable: true, blank: true
+        actual_endDate nullable: true, blank: true, validator: { val, self ->
+            if (val && val < self.actual_startDate) return 'default.invalid.max.message'
+        }
         task_order generator: 'identity'
-        plan_startDate validator: { val, self ->
-            if (val && val > self.plan_endDate) return 'default.invalid.max.message'
-        }
-        actual_startDate validator: { val, self ->
-            if (val && val > self.actual_endDate) return 'default.invalid.max.message'
-        }
-        percent nullable: false, blank: true, max: 100
+        percent nullable: true, blank: true, max: 100
+        project nullable: true, blank: true
     }
 
     static mapping = {
         sort 'task_order'
         order 'asc'
+        percent defaultValue: 0
     }
 }

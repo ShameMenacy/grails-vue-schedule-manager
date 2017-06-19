@@ -20,9 +20,40 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
-            <div class="panel-body"></div>
+            <div class="panel-body">
+                <div id="user" class="container">
+                    <p>
+                        <strong>A project administrator</strong> is a professional who organizes the
+                        necessary team members and specializes in facilitating, reporting and analyzing projects under
+                        the supervision of a project manager
+                    </p>
+                    <table id="table_id" class="display">
+                        <thead>
+                        <tr>
+                            <th>Login ID</th>
+                            <th>Name</th>
+                            <th>Mail Address</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <g:each in="${sm_UserList}" var="user">
+                            <tr>
+                                <td>${user.loginId}</td>
+                                <td>${user.name}</td>
+                                <td>${user.mailAddress}</td>
+                            </tr>
+                        </g:each>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready( function () {
+        $('#table_id').DataTable();
+    } );
+</script>
 </body>
 </html>

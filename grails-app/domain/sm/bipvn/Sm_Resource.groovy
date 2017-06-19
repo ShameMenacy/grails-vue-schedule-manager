@@ -2,7 +2,6 @@ package sm.bipvn
 
 import grails.rest.Resource
 
-@Resource(uri='/sm/resources', formats=['json', 'xml'])
 class Sm_Resource {
 
     String name
