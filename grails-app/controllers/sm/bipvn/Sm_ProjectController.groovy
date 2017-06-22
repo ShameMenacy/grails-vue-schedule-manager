@@ -1,23 +1,30 @@
 package sm.bipvn
 
-import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
+import org.springframework.dao.DataIntegrityViolationException
 
-@Transactional(readOnly = true)
+@Transactional()
 class Sm_ProjectController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    def index() {
+        redirect(action: "list", params: params)
+    }
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Sm_Project.list(params), model:[sm_ProjectCount: Sm_Project.count()]
+    def list(Integer max) {
+        [sm_ProjectList: Sm_Project.list(), sm_ProjectCount: Sm_Project.count()]
     }
 
     def show(Sm_Project sm_Project) {
+        if (sm_Project == null) {
+            notFound()
+            return
+        }
+        flash.flgMode = Const.FLG_MODE_SHOW
         respond sm_Project
     }
 
     def create() {
+        flash.flgMode = Const.FLG_MODE_ADD
         respond new Sm_Project(params)
     }
 
@@ -31,22 +38,17 @@ class Sm_ProjectController {
 
         if (sm_Project.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond sm_Project.errors, view:'create'
+            respond sm_Project.errors, view: 'create'
             return
         }
 
-        sm_Project.save flush:true
+        sm_Project.save flush: true
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'sm_Project.label', default: 'Sm_Project'), sm_Project.id])
-                redirect sm_Project
-            }
-            '*' { respond sm_Project, [status: CREATED] }
-        }
+        redirect sm_Project
     }
 
     def edit(Sm_Project sm_Project) {
+        flash.flgMode = Const.FLG_MODE_UPDATE
         respond sm_Project
     }
 
@@ -60,19 +62,14 @@ class Sm_ProjectController {
 
         if (sm_Project.hasErrors()) {
             transactionStatus.setRollbackOnly()
-            respond sm_Project.errors, view:'edit'
+            respond sm_Project.errors, view: 'edit'
             return
         }
 
-        sm_Project.save flush:true
+        sm_Project.save flush: true
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'sm_Project.label', default: 'Sm_Project'), sm_Project.id])
-                redirect sm_Project
-            }
-            '*'{ respond sm_Project, [status: OK] }
-        }
+        flash.flgMode = Const.FLG_MODE_SHOW
+        redirect sm_Project
     }
 
     @Transactional
@@ -83,25 +80,18 @@ class Sm_ProjectController {
             notFound()
             return
         }
-
-        sm_Project.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'sm_Project.label', default: 'Sm_Project'), sm_Project.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
+        try {
+            sm_Project.delete(flush: true)
+            flash.message = message(code: 'default.deleted.message', args: [message(code: 'sm_Project.label', default: 'SM Project'), sm_Project.name])
+            redirect(action: "index")
+        } catch (DataIntegrityViolationException e) {
+            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'person.label', default: 'SM Project'), sm_Project.id])
+            redirect(action: "show", id: id)
         }
     }
 
     protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'sm_Project.label', default: 'Sm_Project'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
-        }
+        flash.errorMessage = message(code: 'default.not.found.message', args: [message(code: 'default.title.Sm_Project.label'), params.id])
+        redirect action: 'index'
     }
 }

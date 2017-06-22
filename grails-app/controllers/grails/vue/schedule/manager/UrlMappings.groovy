@@ -11,6 +11,7 @@ class UrlMappings {
 
         "/"(view:"/index")
         "500"(view:'/error')
+        "/error"(view:'/error')
         "404"(view:'/notFound')
 
         // Using for mappings URL starting with /admin/$controller

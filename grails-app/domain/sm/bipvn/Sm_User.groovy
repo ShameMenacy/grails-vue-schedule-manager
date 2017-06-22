@@ -5,15 +5,15 @@ import grails.rest.Resource
 class Sm_User {
 
     String loginId
-    String name
     String mailAddress
+    String name
     Date dateCreated
     Date lastUpdated
 
     static constraints = {
         loginId size: 5..15, blank: false, unique: true
+        mailAddress email: true, blank: false, unique: true
         name nullable: false, maxSize: 128
-        mailAddress email: true, blank: false
     }
 
     static mapping = {

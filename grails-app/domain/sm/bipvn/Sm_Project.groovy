@@ -5,6 +5,8 @@ import grails.rest.Resource
 class Sm_Project {
 
     String name
+    String title
+    String description
     Date dateCreated
     Date lastUpdated
 
@@ -14,13 +16,16 @@ class Sm_Project {
 
     static constraints = {
         name nullable: false, blank: false
+        title nullable: false, blank: false
+        description nullable: true, blank: true
         task nullable: true
         owner nullable: true
     }
 
     static mapping = {
+        description type: "text"
         autoTimestamp true
-        sort 'id'
-        order 'asc'
+        sort 'dateCreated'
+        order 'desc'
     }
 }
