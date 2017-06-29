@@ -48,6 +48,7 @@ dependencies {
     compile "org.grails.plugins:gsp"
     // https://mvnrepository.com/artifact/org.postgresql/postgresql
     compile group: 'org.postgresql', name: 'postgresql', version: '9.4-1200-jdbc41'
+    compile "org.grails.plugins:grails-spring-websocket:2.3.0"
     console "org.grails:grails-console"
     profile "org.grails.profiles:web"
     runtime "com.h2database:h2"

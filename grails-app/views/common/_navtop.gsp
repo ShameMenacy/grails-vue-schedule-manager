@@ -189,6 +189,8 @@
             <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
         </a>
         <ul class="dropdown-menu dropdown-user">
+            <g:hiddenField name="userId" id="userId" value="${userInfo.id}"/>
+            <g:hiddenField name="userName" id="userName" value="${userInfo.name}"/>
             <li><a href="${createLink(mapping:'smUser', action: 'show', id: userInfo.id)}"><i
                     class="fa fa-user fa-fw"></i> User Profile</a>
             </li>

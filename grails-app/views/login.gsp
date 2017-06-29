@@ -37,6 +37,7 @@
                                     Remember Me
                                 </label>
                             </div>
+                            <g:hiddenField  name="id" values="${user?.id}"/>
                             <g:actionSubmit class="btn btn-lg btn-success btn-block" value="Login" action="login"/>
                         </fieldset>
                     </g:form>

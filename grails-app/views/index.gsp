@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
+    <asset:javascript src="spring-websocket"/>
 </head>
 <body>
 <div class="row">
@@ -20,8 +21,8 @@
                         <i class="fa fa-user-circle fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">3</div>
-                        <div>New User!</div>
+                        <div class="huge">${userCount}</div>
+                        <div>Total User!</div>
                     </div>
                 </div>
             </div>
@@ -42,8 +43,8 @@
                         <i class="fa fa-eercast fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">12</div>
-                        <div>New Tasks!</div>
+                        <div class="huge">${taskCount}</div>
+                        <div>Total Tasks!</div>
                     </div>
                 </div>
             </div>
@@ -64,8 +65,8 @@
                         <i class="fa fa-bandcamp fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">0</div>
-                        <div>New Project!</div>
+                        <div class="huge">${projectCount}</div>
+                        <div>Total Project!</div>
                     </div>
                 </div>
             </div>
@@ -86,8 +87,8 @@
                         <i class="fa fa-support fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">1</div>
-                        <div>New Resource!</div>
+                        <div class="huge">${resourceCount}</div>
+                        <div>Total Resource!</div>
                     </div>
                 </div>
             </div>
@@ -251,11 +252,6 @@
                                     </span>
                     </a>
                     <a href="#" class="list-group-item">
-                        <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                    <span class="pull-right text-muted small"><em>12 minutes ago</em>
-                                    </span>
-                    </a>
-                    <a href="#" class="list-group-item">
                         <i class="fa fa-envelope fa-fw"></i> Message Sent
                                     <span class="pull-right text-muted small"><em>27 minutes ago</em>
                                     </span>
@@ -280,16 +276,6 @@
                                     <span class="pull-right text-muted small"><em>10:57 AM</em>
                                     </span>
                     </a>
-                    <a href="#" class="list-group-item">
-                        <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
-                                    <span class="pull-right text-muted small"><em>9:49 AM</em>
-                                    </span>
-                    </a>
-                    <a href="#" class="list-group-item">
-                        <i class="fa fa-money fa-fw"></i> Payment Received
-                                    <span class="pull-right text-muted small"><em>Yesterday</em>
-                                    </span>
-                    </a>
                 </div>
                 <!-- /.list-group -->
                 <a href="#" class="btn btn-default btn-block">View All Alerts</a>
@@ -297,9 +283,138 @@
             <!-- /.panel-body -->
         </div>
         <!-- /.panel -->
+        <div class="chat-panel panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-comments fa-fw"></i> Chat
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu slidedown">
+                        <li>
+                            <a href="#" onclick="makeChatAvailable();return false;">
+                                <i class="fa fa-check-circle fa-fw"></i> Available
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="makeChatClean();return false;">
+                                <i class="fa fa-times fa-fw"></i> Clean
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="makeChatMute();return false;">
+                                <i class="fa fa-clock-o fa-fw"></i> Mute
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#" onclick="makeChatSignOut();return false;">
+                                <i class="fa fa-sign-out fa-fw"></i> Sign Out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body" id="chat-panel">
+                <ul class="chat" id="chat-body">
+                </ul>
+            </div>
+            <!-- /.panel-body -->
+            <div class="panel-footer" id="chat">
+                <div class="input-group">
+                    <g:field id="message" name="message" type="text" class="form-control input-sm"
+                             placeholder="Type your message here..."
+                             onkeydown="if (event.keyCode == 13) sendMessage()"/>
+                    <span class="input-group-btn">
+                    <g:field type="button" name="btn-chat" id="btn-chat" class="btn btn-warning btn-sm" value="Send"
+                             onclick="sendMessage()"/>
+                    </span>
+                </div>
+            </div>
+            <!-- /.col-lg-4 -->
+        </div>
+        <!-- /.row -->
     </div>
-    <!-- /.col-lg-4 -->
+    <!-- /#page-wrapper -->
 </div>
-<!-- /.row -->
+<!-- /#wrapper -->
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#btn-chat').attr('disabled',true);
+        $('#message').keyup(function(){
+            if($(this).val().length !=0)
+                $('#btn-chat').attr('disabled', false);
+            else
+                $('#btn-chat').attr('disabled',true);
+        })
+    });
+
+    var socket = new SockJS("${createLink(uri: '/stomp')}");
+    var client = Stomp.over(socket);
+
+    function sendMessage() {
+        if($('#message').val().length != 0) {
+            var messMap = new Map();
+            messMap.set('messageId', $('#userId').val());
+            messMap.set('messSender', $('#userName').val());
+            messMap.set('messContent', $('#message').val());
+            client.send("/app/chat", {}, JSON.stringify([...messMap]));
+            refreshChat();
+        }
+    }
+
+    client.connect({}, function() {
+        client.subscribe("/topic/chat", function(message) {
+            var receiptMess = new Map(JSON.parse(message.body));
+            appendMessage(receiptMess);
+            loadFinalMess();
+        });
+    });
+
+    function appendMessage(message) {
+        var align =  ($('#userId').val() == message.get('messageId') ? "right" : "left");
+        var avatar =  ($('#userId').val() == message.get('messageId') ? "http://placehold.it/50/55C1E7/fff" : "http://placehold.it/50/FA6F57/fff");
+        $('#chat-body').append("<li class='" + align + " clearfix'><span class='chat-img pull-" + align + "'> <img src='" + avatar + "' alt='User Avatar' class='img-circle'/> </span> <div class='chat-body clearfix'> <div class='header'> <small class=' text-muted'> <i class='fa fa-clock-o fa-fw'></i> " + new Date().toLocaleString() + " </small> <strong class='pull-" + align + " primary-font'>" + message.get('messSender') + "</strong> </div> <p> " + message.get('messContent') + " </p> </div></li>");
+        $('#chat-body').scrollTop = 0;
+    }
+
+    function refreshChat() {
+        document.getElementById('btn-chat').disabled  = false;
+        var mess = document.getElementById("message");
+        mess.readOnly = false;
+        mess.value = '';
+        mess.focus();
+        loadFinalMess();
+    }
+
+    function loadFinalMess() {
+        $('#chat-panel').animate({
+        scrollTop: $('#chat-panel')[0].scrollHeight}, 500);
+    }
+
+    function makeChatAvailable() {
+        $("#chat-panel").show();
+        $("#chat").show();
+        loadFinalMess();
+        refreshChat();
+    }
+
+    function makeChatClean() {
+        document.getElementById('chat-body').innerHTML = "";
+        refreshChat();
+    }
+
+    function makeChatMute() {
+        document.getElementById('message').readOnly = true;
+        document.getElementById('btn-chat').disabled = true;
+        loadFinalMess();
+    }
+
+    function makeChatSignOut() {
+        $("#chat-panel").hide();
+        $("#chat").hide();
+    }
+</script>
 </body>
 </html>
