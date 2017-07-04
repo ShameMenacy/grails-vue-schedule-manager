@@ -1,11 +1,9 @@
 package sm.bipvn
 
-import grails.rest.Resource
-
 class Sm_Resource {
 
     String name
-    Integer reserved
+    Integer reserved = 0
 
     static hasMany = [tasks: Sm_Task]
     static belongsTo = Sm_Task

@@ -7,22 +7,18 @@
         <g:layoutTitle default="${message(code: 'default.title.website')}"/>
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <g:layoutHead/>
     <asset:stylesheet src="application.css"/>
     <asset:javascript src="application.js"/>
-    <g:layoutHead/>
 </head>
 <body>
 <div id="wrapper">
     <g:render template="/common/header"/>
+    <g:render template="/common/navbar"/>
     <div id="page-wrapper">
-
         <g:layoutBody/>
     </div>
-    <hr/>
     <g:render template="/common/footer"/>
-    <!-- /#page-wrapper -->
 </div>
-<!-- /#wrapper -->
-
 </body>
 </html>

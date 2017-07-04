@@ -19,7 +19,7 @@ class AuthController {
         if (!userInfo) {
             def authFlg = "dummy" // dummy || product
             if (StringUtils.equals(authFlg, "dummy")) {
-                def user = new Sm_User(userInfoMap).save(flush: true, failOnError: true)
+                Sm_User user = new Sm_User(userInfoMap).save(flush: true, failOnError: true)
                 session.userInfo = user
             }
         } else {

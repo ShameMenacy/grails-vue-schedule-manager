@@ -1,7 +1,5 @@
 package sm.bipvn
 
-import grails.rest.Resource
-
 class Sm_Task {
 
     String name
@@ -10,7 +8,7 @@ class Sm_Task {
     Date actual_startDate
     Date actual_endDate
     Integer task_order
-    Integer percent
+    Integer percent = 0
 
     Sm_Project project
 
@@ -26,9 +24,10 @@ class Sm_Task {
         actual_endDate nullable: true, blank: true, validator: { val, self ->
             if (val && val < self.actual_startDate) return 'default.invalid.max.message'
         }
-        task_order generator: 'identity'
-        percent nullable: true, blank: true, max: 100
+        task_order nullable: true, blank: true
+        percent nullable: false, blank: false, max: 100
         project nullable: true, blank: true
+        resources nullable: true, blank: true
     }
 
     static mapping = {

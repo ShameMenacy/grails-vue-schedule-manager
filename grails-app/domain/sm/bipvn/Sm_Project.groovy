@@ -1,7 +1,5 @@
 package sm.bipvn
 
-import grails.rest.Resource
-
 class Sm_Project {
 
     String name
@@ -12,13 +10,13 @@ class Sm_Project {
 
     Sm_User owner
 
-    static hasMany = [task: Sm_Task]
+    static hasMany = [tasks: Sm_Task]
 
     static constraints = {
         name nullable: false, blank: false
         title nullable: false, blank: false
         description nullable: true, blank: true
-        task nullable: true
+        tasks nullable: true
         owner nullable: true
     }
 
@@ -27,5 +25,11 @@ class Sm_Project {
         autoTimestamp true
         sort 'dateCreated'
         order 'desc'
+        tasks sort: 'task_order', order: 'asc'
+    }
+
+    def complete(){
+//        tasks.percent.sum() / tasks.size()
+        Math.abs(new Random().nextInt() % 100) + 1
     }
 }

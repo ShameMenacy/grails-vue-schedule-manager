@@ -1,7 +1,5 @@
 package sm.bipvn
 
-import grails.rest.Resource
-
 class Sm_User {
 
     String loginId
@@ -10,9 +8,11 @@ class Sm_User {
     Date dateCreated
     Date lastUpdated
 
+    static hasMany = [projects: Sm_Project]
+
     static constraints = {
-        loginId size: 5..15, blank: false, unique: true
-        mailAddress email: true, blank: false, unique: true
+        loginId size: 5..15, blank: false
+        mailAddress email: true, blank: false
         name nullable: false, maxSize: 128
     }
 

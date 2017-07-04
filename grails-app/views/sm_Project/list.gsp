@@ -19,16 +19,15 @@
 </div>
 
 <g:each in="${sm_ProjectList}" var="project" status="idx">
-    <a href="${createLink(mapping:'smProject', action: 'show', id: project.id)}">
         <div class="${ ((idx + 1) % 3) == 0 ?'row':'' }">
             <div class="col-lg-4">
                 <div class="panel">
                     <div class="panel-heading">
-                        ${project.title}
+                        <a href="${createLink(mapping:'smProject', action: 'show', id: project.id)}">${project.title}</a>
                         <a href="${createLink(mapping:'smProject', action: 'delete', id: project.id)}" class="close fa fa-times" data-dismiss="alert" aria-label="close"></a>
                     </div>
                     <div class="panel-body">
-                        ${project.description ?: 'BLANK'}
+                        <a href="${createLink(mapping:'smProject', action: 'tasks', id: project.id)}">${project.description ?: 'BLANK'}</a>
                     </div>
                     <div class="panel-footer">
                         <g:formatDate format="yyyy-MM-dd" date="${project.dateCreated}"/>
@@ -36,7 +35,6 @@
                 </div>
             </div>
         </div>
-    </a>
 </g:each>
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
