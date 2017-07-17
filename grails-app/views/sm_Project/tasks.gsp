@@ -13,8 +13,17 @@
 <asset:javascript src="application.js"/>
 
 <style type="text/css">
-    html, body{margin:0px;padding:0px;height:100%;overflow:hidden;}
-    #project_scheduler{width:auto;height:85%;}
+html, body {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    overflow: hidden;
+}
+
+#project_scheduler {
+    width: auto;
+    height: 85%;
+}
 </style>
 
 <g:javascript>
@@ -29,9 +38,34 @@
                 'data': scheduler.getEvent(id)
             }
         };
-        var targetUrl = '${g.createLink(mapping:'smTask', action:'save')}';
+        var targetUrl = '${g.createLink(mapping: 'smTask', action: 'save')}';
         dhtmlxAjax.post(targetUrl, "dataContent=" + JSON.stringify(...[entries]), function(message){
             dhtmlx.message({ text:"Your data has been successfully saved!"});
+        });
+    });
+
+    scheduler.attachEvent("onEventChanged", function(id,ev) {
+        var entries = {
+            'task': {
+                'project': $('#projectId').val(),
+                'data': scheduler.getEvent(id)
+            }
+        };
+        var targetUrl = '${g.createLink(mapping: 'smTask', action: 'update')}';
+        dhtmlxAjax.post(targetUrl, "dataContent=" + JSON.stringify(...[entries]), function(message){
+            dhtmlx.message({ text:"Your data has been successfully changed!"});
+        });
+    });
+
+    scheduler.attachEvent("onEventDeleted", function(id,ev) {
+        var entries = {
+            'task': {
+                'id': id
+            }
+        };
+        var targetUrl = '${g.createLink(mapping: 'smTask', action: 'delete')}';
+        dhtmlxAjax.post(targetUrl, "dataContent=" + JSON.stringify(...[entries]), function(message){
+            dhtmlx.message({ text:"Your data has been successfully deleted!"});
         });
     });
 
@@ -60,8 +94,7 @@
         // Configuring the Lightbox - Lightbox Controls
         scheduler.config.lightbox.sections = [
             { name:"name", map_to:"text", type:"textarea", default_value:"Input task's name...", focus:true},
-            { name:"plan", type:"calendar_time", map_to:"plan"},
-            { name:"actual", type:"calendar_time", map_to:"actual"}
+            { name:"plan", type:"calendar_time", map_to:"plan"}
         ];
         scheduler.locale.labels.year_tab ="Year";
         scheduler.locale.labels.agenda_tab="Agenda";
@@ -79,36 +112,36 @@
         <g:each in="${project?.tasks}" var="task">
             jsonTask.push({
                 id: ${task.id},
-                text: '${task.name.encodeAsJavaScript()}',
-                start_date: "${formatDate(format:'MM/dd/yyyy HH:mm',date:task.plan_startDate?:new Date())}",
-                end_date: "${formatDate(format:'MM/dd/yyyy HH:mm',date:task.plan_endDate?:new Date())}"
-            });
+                    text: '${task.name.encodeAsJavaScript()}',
+                    start_date: "${formatDate(format: 'MM/dd/yyyy HH:mm', date: task.plan_startDate ?: new Date())}",
+                    end_date: "${formatDate(format: 'MM/dd/yyyy HH:mm', date: task.plan_endDate ?: new Date())}"
+                });
         </g:each>
         return JSON.stringify(jsonTask);
     };
 
-    function loadCalendar() {
-        loadConf();
-        scheduler.init('project_scheduler', new Date(), "month");
-        var events = initData();
-        scheduler.parse(events, "json"); //takes the name and format of the data source
-    }
+function loadCalendar() {
+    loadConf();
+    scheduler.init('project_scheduler', new Date(), "month");
+    var events = initData();
+    scheduler.parse(events, "json"); //takes the name and format of the data source
+}
 
-    function show_minical(){
-        if (scheduler.isCalendarVisible()){
-            scheduler.destroyCalendar();
-        } else {
-            scheduler.renderCalendar({
-                position:"dhx_minical_icon",
-                date:scheduler._date,
-                navigation:true,
-                handler:function(date,calendar){
-                    scheduler.setCurrentView(date);
-                    scheduler.destroyCalendar()
-                }
-            });
-        }
-    };
+function show_minical(){
+    if (scheduler.isCalendarVisible()){
+        scheduler.destroyCalendar();
+    } else {
+        scheduler.renderCalendar({
+            position:"dhx_minical_icon",
+            date:scheduler._date,
+            navigation:true,
+            handler:function(date,calendar){
+                scheduler.setCurrentView(date);
+                scheduler.destroyCalendar()
+            }
+        });
+    }
+};
 </g:javascript>
 
 <body>
@@ -117,18 +150,29 @@
 <div id="project_scheduler" class="dhx_cal_container">
     <div class="dhx_cal_navline col-lg-12">
         <div class="dhx_cal_prev_button">&nbsp;</div>
+
         <div class="dhx_cal_next_button">&nbsp;</div>
+
         <div class="dhx_cal_today_button"></div>
+
         <div class="dhx_cal_date"></div>
+
         <div class="dhx_minical_icon" id="dhx_minical_icon" onclick="show_minical()">&nbsp;</div>
+
         <div class="dhx_cal_tab" name="day_tab"></div>
+
         <div class="dhx_cal_tab" name="week_tab"></div>
+
         <div class="dhx_cal_tab" name="month_tab"></div>
+
         <div class="dhx_cal_tab" name="year_tab"></div>
+
         <div class="dhx_cal_tab" name="agenda_tab"></div>
     </div>
+
     <div class="dhx_cal_header">
     </div>
+
     <div class="dhx_cal_data">
     </div>
 </div>
