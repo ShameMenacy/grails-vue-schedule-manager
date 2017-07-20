@@ -6,13 +6,23 @@ import org.springframework.dao.DataIntegrityViolationException
 @Transactional()
 class Sm_ProjectController {
 
-    def userProjects = Sm_Project.list(owner: session?.userInfo,max: 4)
-
-    def index() {
-        redirect(action: "list", params: params)
+    def projectCriteria = Sm_Project.createCriteria()
+    def userProjects = projectCriteria.list {
+        owner {
+            eq 'id', session?.userInfo?.id
+        }
+        and {
+//                isNotEmpty("tasks")
+        }
+        order("lastUpdated", "desc")
     }
 
-    def list(Integer max) {
+    def index() {
+        def startTime = Sm_Task.list().sort { it.plan_startDate }.find { it.plan_startDate != null }?.plan_startDate
+        [sm_ProjectList: Sm_Project.list(), sm_ProjectCount: Sm_Project.count(), userProjects: userProjects, startTime: startTime]
+    }
+
+    def list() {
         [sm_ProjectList: Sm_Project.list(), sm_ProjectCount: Sm_Project.count(), userProjects: userProjects]
     }
 

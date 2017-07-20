@@ -28,8 +28,20 @@ class Sm_Project {
         tasks sort: 'task_order', order: 'asc'
     }
 
-    def complete(){
+    def complete() {
 //        tasks.percent.sum() / tasks.size()
-        Math.abs(new Random().nextInt() % 100) + 1
+        Math.abs(new Random().nextInt(100) / 100)
+    }
+
+    def start_date() {
+        if (tasks) {
+            tasks.sort { it.plan_startDate }.find { it.plan_startDate != null}?.plan_startDate
+        }
+    }
+
+    def end_date() {
+        if (tasks) {
+            tasks.sort { it.plan_endDate }.last()?.plan_endDate
+        }
     }
 }

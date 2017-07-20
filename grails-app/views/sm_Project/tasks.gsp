@@ -28,7 +28,10 @@ html, body {
 
 <g:javascript>
     $(document).ready(function() {
-        loadCalendar();
+        loadConf();
+        scheduler.init('project_scheduler', new Date(), "agenda");
+        var events = initData();
+        scheduler.parse(events, "json"); //takes the name and format of the data source
     });
 
     scheduler.attachEvent("onEventAdded", function(id,ev) {
@@ -112,36 +115,29 @@ html, body {
         <g:each in="${project?.tasks}" var="task">
             jsonTask.push({
                 id: ${task.id},
-                    text: '${task.name.encodeAsJavaScript()}',
-                    start_date: "${formatDate(format: 'MM/dd/yyyy HH:mm', date: task.plan_startDate ?: new Date())}",
-                    end_date: "${formatDate(format: 'MM/dd/yyyy HH:mm', date: task.plan_endDate ?: new Date())}"
-                });
+                text: '${task.name.encodeAsJavaScript()}',
+                start_date: "${formatDate(format: 'MM/dd/yyyy HH:mm', date: task.plan_startDate ?: new Date())}",
+                end_date: "${formatDate(format: 'MM/dd/yyyy HH:mm', date: task.plan_endDate ?: new Date())}"
+            });
         </g:each>
         return JSON.stringify(jsonTask);
     };
 
-function loadCalendar() {
-    loadConf();
-    scheduler.init('project_scheduler', new Date(), "month");
-    var events = initData();
-    scheduler.parse(events, "json"); //takes the name and format of the data source
-}
-
-function show_minical(){
-    if (scheduler.isCalendarVisible()){
-        scheduler.destroyCalendar();
-    } else {
-        scheduler.renderCalendar({
-            position:"dhx_minical_icon",
-            date:scheduler._date,
-            navigation:true,
-            handler:function(date,calendar){
-                scheduler.setCurrentView(date);
-                scheduler.destroyCalendar()
-            }
-        });
-    }
-};
+    function show_minical(){
+        if (scheduler.isCalendarVisible()){
+            scheduler.destroyCalendar();
+        } else {
+            scheduler.renderCalendar({
+                position:"dhx_minical_icon",
+                date:scheduler._date,
+                navigation:true,
+                handler:function(date,calendar){
+                    scheduler.setCurrentView(date);
+                    scheduler.destroyCalendar()
+                }
+            });
+        }
+    };
 </g:javascript>
 
 <body>
